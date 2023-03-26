@@ -60,9 +60,8 @@ object Task1 extends App:
   // TASK 4, SVOLTO DA SOLO
   @tailrec
   def foldLeft[A, B](l: List[A])(defVal: B)(f: (B, A) => B): B = l match
-    case Cons(h, Nil()) => f(defVal, h)
+    case Nil()=> defVal
     case Cons(h, t) => foldLeft(t)(f(defVal, h))(f)
-    case _ => defVal
 
   def foldRight[A, B](l: List[A])(defVal: B)(f: (A, B) => B): B =
     foldLeft(reverse(l))(defVal)((a, x) => f(x, a))
