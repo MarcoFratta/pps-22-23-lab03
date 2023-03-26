@@ -64,9 +64,9 @@ object Task1 extends App:
     case Cons(h,t) => foldLeft(t)(f(defVal,h))(f)
     case _ => defVal
 
-  private def reverse[A](l:List[A]):List[A] = l match
-    case Nil() => Nil()
-    case Cons(h,t) => append(reverse(t),Cons(h,Nil()))
+  private def reverse[A](l:List[A]):List[A] =
+    foldLeft(l)(Nil())((head,tail) => Cons(tail,head))
+
 
   def foldRight[A, B](l: List[A])(defVal: B)(f: (A, B) => B): B =
     foldLeft(reverse(l))(defVal)((a,x) => f(x,a))
@@ -104,6 +104,8 @@ object Task1 extends App:
     def iterate[A](init: => A)(next: A => A): Stream[A] =
       cons(init, iterate(next(init))(next))
 
+
+    // TASK 5, SVOLTO DA SOLO
     @tailrec
     def drop[A](s: Stream[A])(n: Int): Stream[A] = (s, n) match
       case (s,0) => s
@@ -111,8 +113,11 @@ object Task1 extends App:
       case (Empty(), _) => Empty()
       case (Cons(_,t),n) => drop(t())(n - 1)
 
-    def constant[A](k: A): Stream[A] = iterate(k)(k => k)
+    // TASK 6, SVOLTO DA SOLO
 
+    def constant[A](k: A): Stream[A] = cons(k, constant(k))
+
+    // TASK 7, SVOLTO DA SOLO
     private def fibonacciSeq(a: Int, b: Int): Stream[Int] =
       Cons(() => a, () => fibonacciSeq(b, a + b))
     def fib():Stream[Int] = fibonacciSeq(0, 1)
