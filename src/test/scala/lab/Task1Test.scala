@@ -6,12 +6,13 @@ import org.junit.Test
 import u02.Modules.Person
 import u02.Modules.Person.Teacher
 import u03.Lists.*
+import List.*
+import u02.Modules.*
+import Person.*
 
-class Task1Test:
+class Task1aTest:
 
-  import List.*
-  import u02.Modules.*
-  import Person.*
+
 
   val list: List[Int] = Cons(1, Cons(2, Cons(3, Nil())))
 
@@ -25,6 +26,9 @@ class Task1Test:
 
   @Test def testDropNil(): Unit =
     assertEquals(Nil(), drop(Nil(), 0))
+class Task1bTest:
+
+  val list: List[Int] = Cons(1, Cons(2, Cons(3, Nil())))
 
   @Test def testAppend(): Unit =
     assertEquals(Cons(1, Cons(2, Cons(3, Cons(4, Nil())))), append(list, Cons(4, Nil())))
@@ -34,9 +38,12 @@ class Task1Test:
 
   @Test def testNilAppendNil(): Unit =
     assertEquals(Nil(), append(Nil(), Nil()))
-
+class Task1cTest:
   @Test def testFlatMap(): Unit =
     assertEquals(Cons(2, Nil()), flatMap(Cons(1, Nil()))(v => Cons(v + 1, Nil())))
+class Task1dTest:
+
+  val list: List[Int] = Cons(1, Cons(2, Cons(3, Nil())))
 
   @Test def testMap(): Unit =
     assertEquals(Cons(2, Nil()), map2(Cons(1, Nil()))(v => v + 1))
@@ -44,6 +51,9 @@ class Task1Test:
   @Test def testFilter(): Unit =
     assertEquals(Cons(2, Cons(3, Nil())), filter2(list)(_ > 1))
     assertEquals(Nil(), filter2(Cons(1, Nil()))(_ > 2))
+class Task2Test:
+
+  val list: List[Int] = Cons(1, Cons(2, Cons(3, Nil())))
 
   @Test def testMax(): Unit =
     import u02.Optionals.Option.*
@@ -51,8 +61,7 @@ class Task1Test:
     import Option.*
     assertEquals(Some(3), max(list))
     assertEquals(Some(2), max(Cons(2, Cons(1, Nil()))))
-
-
+class Task3Test:
   @Test def testPersonCourses(): Unit =
     val p1: Person = Student("s1", 3);
     val p2: Person = Teacher("t1", "Math");
@@ -63,8 +72,7 @@ class Task1Test:
 
   @Test def testPersonNilCourses(): Unit =
     assertEquals(Nil(), personCourses(Cons(Student("a", 1), Nil())))
-
-
+class Task4Test:
   @Test def testFoldLeft(): Unit =
     val lst = Cons(3, Cons(7, Cons(1, Cons(5, Nil()))))
     assertEquals(-16, foldLeft(lst)(0)(_ - _))
@@ -74,19 +82,18 @@ class Task1Test:
     val lst = Cons(3, Cons(7, Cons(1, Cons(5, Nil()))))
     assertEquals(-8, foldRight(lst)(0)(_ - _))
     assertEquals(0, foldRight(Nil[Int]())(0)(_ + _))
-
+class Task5Test:
   @Test def testStreamDrop(): Unit =
     val s = Stream.take(Stream.iterate(0)(_ + 1))(10)
     assertEquals(Cons(6, Cons(7, Cons(8, Cons(9, Nil())))),
       Stream.toList(Stream.drop(s)(6)))
     assertEquals(s, Stream.drop(s)(-1))
-
+class Task6Test:
   @Test def testConstant(): Unit =
     val k = "k"
     val s = Stream.toList(Stream.take(Stream.constant(k))(5))
     assertEquals(Cons(k, Cons(k, Cons(k, Cons(k, Cons(k, Nil()))))), s)
-
-
+class Task7Test:
   @Test def testFib(): Unit =
     val fibs: Stream[Int] = Stream.fib()
     val s = Stream.toList(Stream.take(fibs)(8))
