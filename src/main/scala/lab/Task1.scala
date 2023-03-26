@@ -22,23 +22,23 @@ object Task1 extends App:
   def drop[A](l: List[A], n: Int): List[A] = l match
     case Cons(_, t) if n == 0 => t
     case Nil() => Nil()
-    case Cons(h, t) => Cons(h,drop(t, n - 1))
+    case Cons(h, t) => Cons(h, drop(t, n - 1))
 
   // TASK 1b, SVOLTO DA SOLO
   def append[A](left: List[A], right: List[A]): List[A] = left match
     case Nil() => right
-    case Cons(h,t) => Cons(h, append(t, right))
+    case Cons(h, t) => Cons(h, append(t, right))
 
   // TASK 1c, SVOLTO DA SOLO
-  def flatMap[A,B](l: List[A])(f: A => List[B]): List[B] = l match
+  def flatMap[A, B](l: List[A])(f: A => List[B]): List[B] = l match
     case Nil() => Nil()
-    case Cons(h,t) => append(f(h), flatMap(t)(f))
+    case Cons(h, t) => append(f(h), flatMap(t)(f))
 
   // TASK 1d, SVOLTO DA SOLO
   def map2[A, B](l: List[A])(f: A => B): List[B] =
-    flatMap(l)(x => Cons(f(x),Nil()))
+    flatMap(l)(x => Cons(f(x), Nil()))
 
-  def filter2[A](l: List[A])(f:A => Boolean): List[A] =
+  def filter2[A](l: List[A])(f: A => Boolean): List[A] =
     flatMap(l)(a => f(a) match
       case true => Cons(a, Nil())
       case _ => Nil())
@@ -46,7 +46,7 @@ object Task1 extends App:
   // TASK 2, SVOLTO DA SOLO
   def max(l: List[Int]): Option[Int] = l match
     case Nil() => None()
-    case Cons(h,t) => max(t) match
+    case Cons(h, t) => max(t) match
       case Some(x) if x > h => Some(x)
       case _ => Some(h)
 
@@ -54,26 +54,21 @@ object Task1 extends App:
   // TASK 3, SVOLTO DA SOLO
   def personCourses(l: List[Person]): List[String] =
     flatMap(l)(x => x match
-      case Teacher(_,c) => Cons(c, Nil())
+      case Teacher(_, c) => Cons(c, Nil())
       case _ => Nil())
 
   // TASK 4, SVOLTO DA SOLO
   @tailrec
-  def foldLeft[A,B](l: List[A])(defVal: B)(f: (B, A) => B): B = l match
+  def foldLeft[A, B](l: List[A])(defVal: B)(f: (B, A) => B): B = l match
     case Cons(h, Nil()) => f(defVal, h)
-    case Cons(h,t) => foldLeft(t)(f(defVal,h))(f)
+    case Cons(h, t) => foldLeft(t)(f(defVal, h))(f)
     case _ => defVal
 
-  private def reverse[A](l:List[A]):List[A] =
-    foldLeft(l)(Nil())((head,tail) => Cons(tail,head))
-
-
   def foldRight[A, B](l: List[A])(defVal: B)(f: (A, B) => B): B =
-    foldLeft(reverse(l))(defVal)((a,x) => f(x,a))
+    foldLeft(reverse(l))(defVal)((a, x) => f(x, a))
 
-  enum Stream[A]:
-    private case Empty()
-    private case Cons(head: () => A, tail: () => Stream[A])
+  private def reverse[A](l: List[A]): List[A] =
+    foldLeft(l)(Nil())((head, tail) => Cons(tail, head))
 
   object Stream:
 
@@ -108,19 +103,24 @@ object Task1 extends App:
     // TASK 5, SVOLTO DA SOLO
     @tailrec
     def drop[A](s: Stream[A])(n: Int): Stream[A] = (s, n) match
-      case (s,0) => s
-      case (s,n) if n < 0 => s
+      case (s, 0) => s
+      case (s, n) if n < 0 => s
       case (Empty(), _) => Empty()
-      case (Cons(_,t),n) => drop(t())(n - 1)
+      case (Cons(_, t), n) => drop(t())(n - 1)
 
     // TASK 6, SVOLTO DA SOLO
 
     def constant[A](k: A): Stream[A] = cons(k, constant(k))
 
+    def fib(): Stream[Int] = fibonacciSeq(0, 1)
+
     // TASK 7, SVOLTO DA SOLO
     private def fibonacciSeq(a: Int, b: Int): Stream[Int] =
       Cons(() => a, () => fibonacciSeq(b, a + b))
-    def fib():Stream[Int] = fibonacciSeq(0, 1)
 
   end Stream
+
+  enum Stream[A]:
+    private case Empty()
+    private case Cons(head: () => A, tail: () => Stream[A])
 
